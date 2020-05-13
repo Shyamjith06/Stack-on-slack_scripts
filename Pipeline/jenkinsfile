@@ -1,7 +1,7 @@
 node {
      
   stage('Git-Checkout') {
-   sh 'rm -rf prod-config
+   sh 'rm -rf prod-config'
    sh 'git clone -b master https://devops311@bitbucket.org/accelerators-devops/prod-config.git'
   }
     
