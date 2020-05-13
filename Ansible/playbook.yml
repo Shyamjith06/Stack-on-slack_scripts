@@ -19,7 +19,7 @@
     
   
   - name: Copy Project War Files
-    copy: src=/var/lib/jenkins/workspace/production-deployment-role/war-storage-prod/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
+    copy: src= /var/lib/jenkins/workspace/production-deployment-role/war-storage-prod$/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
     notify:
     - Restart Tomcat
 
