@@ -8,7 +8,7 @@ node {
  def project_path="prod-config/Ansible"
  
  dir(project_path) {
- stage(' Downloading Jar From Artifactory Locally'){
+ stage(' Downloading Jar From Artifactory Locally To Deploy'){
     def server= Artifactory.server 'Artifactory'
     def downloadSpec = """{
     "files": [
@@ -22,7 +22,7 @@ node {
     server.download(downloadSpec)
    
 }
-stage('Ansible Playbook Execution') {
+stage('Deploying To Production') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml'
 }
 }
