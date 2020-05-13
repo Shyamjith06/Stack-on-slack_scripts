@@ -17,7 +17,7 @@
   - name: Extract Tomcat
     command: "tar zxf /opt/SP/apps/tomcat.tar.gz  -C /opt/SP/apps/tomcat --strip-components 1"
     
- - name: Remove ROOT folder initially
+  - name: Remove ROOT folder initially
     command: rm -rf /opt/SP/apps/tomcat/webapps/ROOT
 
 
