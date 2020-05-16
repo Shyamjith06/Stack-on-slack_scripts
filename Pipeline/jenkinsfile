@@ -28,7 +28,7 @@ node {
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "/var/lib/jenkins/workspace/war-storage-prod/*.war",
-                        "target": "debit-card-application-development/$BUILD_NUMBER/"}]
+                        "target": "debit-card-application-staging/$BUILD_NUMBER/"}]
                     }"""
         server.upload(uploadSpec)
        
