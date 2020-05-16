@@ -4,6 +4,11 @@ node {
    sh 'rm -rf devops-pipeline'
    sh 'git clone -b staging https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
+  stage('Creating a folder to store artifacts'){
+    sh label: '',script: "mkdir -p /var/lib/jenkins/workspace/war-storage-uat"
+    
+    }
+    
     
  def project_path="devops-pipeline/Ansible"
  
