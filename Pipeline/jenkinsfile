@@ -1,79 +1,69 @@
-   
 node {
      
   stage('Git-Checkout') {
    sh 'rm -rf debit_card_management_app'
-   sh 'git clone -b master https://Shyam_6@bitbucket.org/accelerators-devops/debit_card_management_app.git'
+   sh 'git clone -b development https://devops311@bitbucket.org/accelerators-devops/debit_card_management_app.git'
   }
+   
+   stage('Inspect secrets in Bitbucket Repository'){
+     sh 'trufflehog --regex --entropy=False https://devops311@bitbucket.org/accelerators-devops/debit_card_management_app.git'
+    }
     
  def project_path="debit_card_management_app/project_code"
  
  dir(project_path) {
     
   stage('Maven-Clean') {
-   sh label: '', script: 'mvn clean'
+   sh label: 'Clean', script: 'mvn clean'
   }
     
-stage('Maven-Compile') {
-   sh label: '', script: 'mvn compile'
+ stage('Maven-Compile') {
+   sh label: 'Compile', script: 'mvn compile'
   }
-
-stage('Sonar Analysis'){
-withSonarQubeEnv('SonarQube')
-{ 
-sh 'mvn sonar:sonar'
-}
-}
-
-
+  
+ stage('Sonar Analysis'){
+   withSonarQubeEnv('SonarQube')
+ { 
+  sh 'mvn sonar:sonar'
+ }
+ }
+ 
    stage('Maven-Test') {
    sh label: '', script: 'mvn test'
   }
-
-
   
    stage('Maven-Package') {
    sh label: '', script: 'mvn package'
   }
-  stage('Jfrog Artifacory Upload') {
-        def server= Artifactory.server 'Artifactory'
-                    def uploadSpec= """{
-                        "files": [{
-                        "pattern": "target/debitcardcustomer-0.0.1-SNAPSHOT.war",
-                        "target": "debit-card-application-test"}]
-                    }"""
-        server.upload(uploadSpec)
-       
-        }
   
-   }   
-  
-   stage('Getting Ready With Ansible ') {
-   sh 'rm -rf devops-pipeline'
-   sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
+            
+     stage('Snyk-test') {
+    sh label: '', script: 'mvn -N io.takari:maven:wrapper'
+   snykSecurity severity: 'high', snykInstallation: 'SnykPlugin', snykTokenId: 'snyk-id'
   }
-   
+  
+  
+         
 def playbook_path="devops-pipeline/Ansible"
 dir(playbook_path) {
 stage('Ansible Playbook Execution') {
-sh label: 'Ansible', script: 'ansible-playbook -i inventory -u testing playbook.yml'
+sh label: 'Ansible', script: 'ansible-playbook -i inventory -u development playbook.yml'
 }
 }
 
-  stage('JIRA Ticket Raising')
-    {
-           withEnv(['JIRA_SITE=jira-site']) {
-      def testIssue = [fields: [ project: [id: '10006'],
-                                 summary: "QA Build Success with Build#${currentBuild.number}",
-                                 description: "QA Build Success with Build#${currentBuild.number}",
-                                 issuetype: [id: '10001']]]
-                                 
-      response = jiraNewIssue issue: testIssue
       
-      echo response.successful.toString()
-      echo response.data.toString()
+      
+      
+      
+        stage('Email -Notification')
+ {
+             mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
+             subject: "Build Success:",
+             body: "Build Successfully .;"
+   
+}
+
  
-    }
-        
-    }
+    
+}
 }
