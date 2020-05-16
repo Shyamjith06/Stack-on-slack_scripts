@@ -3,8 +3,12 @@ node {
      
   stage('Git-Checkout') {
    sh 'rm -rf debit_card_management_app'
-   sh 'git clone -b testing https://Shyam_6@bitbucket.org/accelerators-devops/debit_card_management_app.git'
+   sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/debit_card_management_app.git'
   }
+  
+   stage('Inspect secrets in Bitbucket Repository'){
+     sh 'trufflehog --regex --entropy=False https://devops311@bitbucket.org/accelerators-devops/debit_card_management_app.git'
+    }
     
  def project_path="debit_card_management_app/project_code"
  
@@ -35,28 +39,27 @@ sh 'mvn sonar:sonar'
    stage('Maven-Package') {
    sh label: '', script: 'mvn package'
   }
+  
+              
+   stage('Snyk-test') {
+    sh label: '', script: 'mvn -N io.takari:maven:wrapper'
+   snykSecurity severity: 'high', snykInstallation: 'SnykPlugin', snykTokenId: 'snyk-id'
+  }
+   
+   
   stage('Jfrog Artifacory Upload') {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "target/debitcardcustomer-0.0.1-SNAPSHOT.war",
-                        "target": "debit-card-application-test/$BUILD_NUMBER"}]
+                        "target": "debit-card-application-testing/$BUILD_NUMBER"}]
                     }"""
         server.upload(uploadSpec)
        
         }
   
    }   
-    stage('Snyk-test') {
-    sh label: '', script: 'mvn -N io.takari:maven:wrapper'
-   snykSecurity severity: 'high', snykInstallation: 'SnykPlugin', snykTokenId: 'snyk-id'
-  }
-  
-  
-   stage('Getting Ready With Ansible ') {
-   sh 'rm -rf devops-pipeline'
-   sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
-  }
+
    
 def playbook_path="devops-pipeline/Ansible"
 dir(playbook_path) {
@@ -79,6 +82,15 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u testing playbook.
       echo response.data.toString()
  
     }
+    
+          
+   stage('Email -Notification')
+ {
+             mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
+             subject: "Build Success:",
+             body: "Build Successfully with QA Build#${currentBuild.number} .;"
+   }
+
         
     }
 }
