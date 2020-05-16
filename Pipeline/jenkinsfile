@@ -44,10 +44,14 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml
 }
 
    stage('Email -Notification')
- {
-             mail to: 'rohith.basavarajappa@mindtree.com',
-             subject: "Build Success:"
-             body: "Build Successfull on PROD with QA Build#${QA_BUILD_NUMBER} .;"
+ {   mail bcc: '',
+ body: ' "Build Successfull on PROD with QA Build#${QA_BUILD_NUMBER}',
+ cc: '',
+ from: '',
+ replyTo: '',
+ subject: 'Build Success',
+ to: 'devashish.kumar@mindtree.com'
+             
    }
 
 
