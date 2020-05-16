@@ -30,7 +30,7 @@ node {
     "files": [
     {
       "pattern": "/var/lib/jenkins/workspace/war-storage-prod/,
-      "target": "debit-card-application-staging/$QA_BUILD_NUMBER/"
+      "target": "debit-card-application-staging/$BUILD_NUMBER/"
       }
       ]
       
