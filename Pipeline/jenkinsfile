@@ -5,7 +5,7 @@ node {
    sh 'git clone -b master https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
     stage('Creating a folder to store artifacts'){
-    sh label: '',script: "mkdir -p war-storage-staging"
+    sh label: '',script: "mkdir -p /var/lib/jenkins/workspace/war-storage-staging"
     
     }
     
