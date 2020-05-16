@@ -48,12 +48,12 @@ sh 'mvn sonar:sonar'
   
    }   
   
-   stage('Ansible') {
-   sh 'rm -rf debit_card_management_app'
+   stage('Getting Ready With Ansible ') {
+   sh 'rm -rf devops-pipeline'
    sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
    
-def playbook_path="debit_card_management_app/Ansible"
+def playbook_path="devops-pipeline/Ansible"
 dir(playbook_path) {
 stage('Ansible Playbook Execution') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u testing playbook.yml'
