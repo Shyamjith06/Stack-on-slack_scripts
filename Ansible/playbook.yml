@@ -21,7 +21,7 @@
     command: rm -rf /opt/SP/apps/tomcat/webapps/ROOT
   
   - name: Copy Project War Files
-    copy: src=/var/lib/jenkins/workspace/testing-pipeline-debit-app/debit_card_management_app/project_code/target/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
+    copy: src=/var/lib/jenkins/workspace/war-storage-qa/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
     notify:
     - Restart Tomcat
 
