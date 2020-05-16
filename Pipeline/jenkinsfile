@@ -2,7 +2,7 @@ node {
      
   stage('Git-Checkout') {
    sh 'rm -rf devops-pipeline'
-   sh 'git clone -b master https://devops311@bitbucket.org/accelerators-devops/prod-config.git'
+   sh 'git clone -b master https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
     
  def project_path="devops-pipeline/Ansible"
