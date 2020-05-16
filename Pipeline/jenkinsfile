@@ -14,8 +14,8 @@ node {
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-test/*.war",
-      "target": "/var/lib/jenkins/workspace/war-storage-prod/"
+      "pattern": "debit-card-application-test/$PROD_BUILD_NUMBER/*.war",
+      "target": "/var/lib/jenkins/workspace/war-storage-staging/"
       
     }
     ]
@@ -28,8 +28,8 @@ node {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/var/lib/jenkins/workspace/war-storage-prod/*.war",
-                        "target": "debit-card-application-prod/$BUILD_NUMBER/"}]
+                        "pattern": "/var/lib/jenkins/workspace/war-storage-staging/*.war",
+                        "target": "debit-card-application-prod/$PROD_BUILD_NUMBER/"}]
                     }"""
         server.upload(uploadSpec)
        
