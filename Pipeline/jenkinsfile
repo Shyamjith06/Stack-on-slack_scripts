@@ -46,7 +46,7 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml
             stage('Email -Notification')
  {
              mail to: 'devashish.kumar@mindtree.com',
-             subject: "Build Success:",
+             subject:"build Success:",
              body: "Build Successfully .;"
    
 }
