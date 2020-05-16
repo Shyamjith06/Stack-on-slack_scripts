@@ -45,7 +45,7 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml
 
    stage('Email -Notification')
  {   mail bcc: '',
- body: ' "Build Successfull on PROD with QA Build#${QA_BUILD_NUMBER}',
+ body: 'Build Successfully on PROD with QA Build#${QA_BUILD_NUMBER}',
  cc: '',
  from: '',
  replyTo: '',
