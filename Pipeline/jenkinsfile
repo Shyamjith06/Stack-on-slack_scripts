@@ -23,20 +23,16 @@ node {
     
     
    
-}
- stage(' Uploading Jar To Artifactory'){
-    def server= Artifactory.server 'Artifactory'
-    def downloadSpec = """{
-    "files": [
-    {
-      "pattern": "/var/lib/jenkins/workspace/war-storage-prod/,
-      "target": "debit-card-application-staging/$BUILD_NUMBER/"
-      }
-      ]
-      
-    }"""
-    server.upload(uploadSpec)
-}
+ stage('Jfrog Artifacory Upload') {
+        def server= Artifactory.server 'Artifactory'
+                    def uploadSpec= """{
+                        "files": [{
+                        "pattern": "/var/lib/jenkins/workspace/war-storage-prod/*.war",
+                        "target": "debit-card-application-development/$BUILD_NUMBER/"}]
+                    }"""
+        server.upload(uploadSpec)
+       
+        }
 
 stage('Deploying To Production') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.yml'
