@@ -5,7 +5,7 @@ node {
    sh 'git clone -b master https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
     stage('Creating a folder to store artifacts'){
-    sh label: '',script: "mkdir -p /var/lib/jenkins/workspace/war-storage-staging"
+    sh label: '',script: "mkdir -p /var/lib/jenkins/workspace/war-storage-prod"
     
     }
     
@@ -18,8 +18,8 @@ node {
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-test/$PROD_BUILD_NUMBER/*.war",
-      "target": "/var/lib/jenkins/workspace/war-storage-staging/"
+      "pattern": "debit-card-application-test/${QA_BUILD_NUMBER}/*.war",
+      "target": "/var/lib/jenkins/workspace/war-storage-prod/"
       
     }
     ]
@@ -32,8 +32,8 @@ node {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/var/lib/jenkins/workspace/war-storage-staging/*.war",
-                        "target": "debit-card-application-prod/$PROD_BUILD_NUMBER/"}]
+                        "pattern": "/var/lib/jenkins/workspace/war-storage-prod/*.war",
+                        "target": "debit-card-application-prod/${QA_BUILD_NUMBER}/"}]
                     }"""
         server.upload(uploadSpec)
        
@@ -42,5 +42,15 @@ node {
 stage('Deploying To Production') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml'
 }
+
+   stage('Email -Notification')
+ {
+             mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
+             subject: "Build Success:",
+             body: "Build Successfull on PROD with QA Build#${QA_BUILD_NUMBER} .;"
+   }
+
+
+
 }
 }
