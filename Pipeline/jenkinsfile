@@ -14,16 +14,32 @@ node {
     "files": [
     {
       "pattern": "debit-card-application-test/*.war",
-      "target": "/var/lib/jenkins/workspace/production-deployment-role/war-storage-prod/"
+      "target": "/var/lib/jenkins/workspace/war-storage-prod/"
       
     }
     ]
     }"""
     server.download(downloadSpec)
+    
+    
    
 }
+ stage(' Uploading Jar To Artifactory'){
+    def server= Artifactory.server 'Artifactory'
+    def downloadSpec = """{
+    "files": [
+    {
+      "pattern": "/var/lib/jenkins/workspace/war-storage-prod/,
+      "target": "debit-card-application-staging/$QA_BUILD_NUMBER/"
+      }
+      ]
+      
+    }"""
+    server.upload(uploadSpec)
+}
+
 stage('Deploying To Production') {
-sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml'
+sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.yml'
 }
 }
 }
