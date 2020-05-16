@@ -16,7 +16,7 @@ node {
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-testing/$QA_BUILD_NUMBER/*.war",
+      "pattern": "debit-card-application-testing/${QA_BUILD_NUMBER}/*.war",
       "target": "/var/lib/jenkins/workspace/war-storage-uat/"
       
     }
@@ -31,11 +31,12 @@ node {
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "/var/lib/jenkins/workspace/war-storage-uat/*.war",
-                        "target": "debit-card-application-staging/$QA_BUILD_NUMBER/"}]
+                        "target": "debit-card-application-staging/${QA_BUILD_NUMBER}/"}]
                     }"""
         server.upload(uploadSpec)
        
         }
+        
 def project_path="devops-pipeline/Ansible"
 dir(playbook_path) {
 stage('Deploying To Staging') {
@@ -47,7 +48,7 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.
  {
              mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
              subject: "Build Success:",
-             body: "Build Successfully on UAT with QA Build#$QA_BUILD_NUMBER.;"
+             body: "Build Successfully on UAT with QA Build#${QA_BUILD_NUMBER}.;"
    
 }
 
