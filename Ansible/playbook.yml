@@ -17,7 +17,7 @@
   - name: Extract Tomcat
     command: "tar zxf /opt/SP/apps/tomcat.tar.gz  -C /opt/SP/apps/tomcat --strip-components 1"
   - name: Remove ROOT folder initially
-    command: rm -rf /opt/SP/apps/tomcat/webapps/ROOT
+    command: rm -rf /opt/SP/apps/tomcat/webapps/*
   
   - name: Copy Project War Files
     copy: src=/var/lib/jenkins/workspace/testing-pipeline-debit-app/debit_card_management_app/project_code/target/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
