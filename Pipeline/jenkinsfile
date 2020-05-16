@@ -9,16 +9,14 @@ node {
     
     }
     
-    
- def project_path="devops-pipeline/Ansible"
- 
+
  dir(project_path) {
  stage(' Downloading Jar From Artifactory Locally To Deploy'){
     def server= Artifactory.server 'Artifactory'
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-test/$QA_BUILD_NUMBER/*.war",
+      "pattern": "debit-card-application-testing/$QA_BUILD_NUMBER/*.war",
       "target": "/var/lib/jenkins/workspace/war-storage-uat/"
       
     }
@@ -38,9 +36,20 @@ node {
         server.upload(uploadSpec)
        
         }
-
+def project_path="devops-pipeline/Ansible"
+dir(playbook_path) {
 stage('Deploying To Staging') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.yml'
 }
+}
+
+        stage('Email -Notification')
+ {
+             mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
+             subject: "Build Success:",
+             body: "Build Successfully on UAT with QA Build#$QA_BUILD_NUMBER.;"
+   
+}
+
 }
 }
