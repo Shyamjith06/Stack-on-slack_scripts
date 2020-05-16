@@ -14,7 +14,7 @@ node {
     "files": [
     {
       "pattern": "debit-card-application-test/$QA_BUILD_NUMBER/*.war",
-      "target": "/var/lib/jenkins/workspace/war-storage-qa/"
+      "target": "/var/lib/jenkins/workspace/war-storage-uat/"
       
     }
     ]
@@ -27,7 +27,7 @@ node {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/var/lib/jenkins/workspace/war-storage-qa/*.war",
+                        "pattern": "/var/lib/jenkins/workspace/war-storage-uat/*.war",
                         "target": "debit-card-application-staging/$QA_BUILD_NUMBER/"}]
                     }"""
         server.upload(uploadSpec)
