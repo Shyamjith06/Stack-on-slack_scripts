@@ -1,3 +1,5 @@
+properties([[$class: 'JiraProjectProperty', siteName: 'https://accelerators-stack-on-slack.atlassian.net/'], parameters([string(defaultValue: '', description: 'Select the QA number to build', name: 'QA_BUILD_NUMBER', trim: false)])])
+
 node {
      
   stage('Git-Checkout') {
@@ -9,16 +11,14 @@ node {
     
     }
     
- def project_path="devops-pipeline/Ansible"
- 
- dir(project_path)
- {
+
   stage(' Downloading Jar From Artifactory Locally To Deploy'){
+    echo "Deploying to PROD with latest QA artifact, accessing latest QA build number ${params.QA_BUILD_NUMBER}"
     def server= Artifactory.server 'Artifactory'
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-test/${QA_BUILD_NUMBER}/*.war",
+      "pattern": "debit-card-application-test/${params.QA_BUILD_NUMBER}/*.war",
       "target": "/var/lib/jenkins/workspace/war-storage-prod/"
       
     }
@@ -29,18 +29,24 @@ node {
     
    }
  stage('Jfrog Artifacory Upload') {
+        echo "Updating to Prod artifact with latest QA artifact${params.QA_BUILD_NUMBER}"
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "/var/lib/jenkins/workspace/war-storage-prod/*.war",
-                        "target": "debit-card-application-prod/${QA_BUILD_NUMBER}/"}]
+                        "target": "debit-card-application-prod/${params.QA_BUILD_NUMBER}/"}]
                     }"""
         server.upload(uploadSpec)
        
         }
 
+ def project_path="devops-pipeline/Ansible"
+ dir(project_path)
+ {
 stage('Deploying To Production') {
-sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml'
+echo "Updating QA Build number in the path of the folder that was newly created ${params.QA_BUILD_NUMBER}"
+sh (label: 'Ansible', script: "ansible-playbook -i inventory -u prod playbook.yml --extra-vars 'QABuild=${params.QA_BUILD_NUMBER}'")
+}
 }
 
        /*     stage('Email -Notification')
@@ -51,10 +57,4 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml
    
 }*/
 
-             
-   }
-
-
-
-}
 }
