@@ -4,6 +4,13 @@
   become: yes
   become_method: sudo
   tasks:
+ 
+  - name: Install Apache2 Packages 
+    apt:  name=apache2 state=present
+
+  - name: Start Apache Service
+    service: name=apache2 state=started enabled=true
+ 
   - name: Create Dir to Downlaod Tomcat.
     file: path=/opt/SP/apps/tomcat state=directory
 
@@ -18,10 +25,10 @@
     command: "tar zxf /opt/SP/apps/tomcat.tar.gz  -C /opt/SP/apps/tomcat --strip-components 1"
     
   - name: Remove ROOT folder initially
-    shell: "rm -rf /opt/SP/apps/tomcat/webapps/*"
+    command: rm -rf /opt/SP/apps/tomcat/webapps/ROOT
   
   - name: Copy Project War Files
-    copy: src=/var/lib/jenkins/workspace/development-pipeline-debit-app/debit_card_management_app/project_code/target/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT mode=0644
+    copy: src=/var/lib/jenkins/workspace/development-pipeline-debit-app/debit_card_management_app/project_code/target/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
     notify:
     - Restart Tomcat
 
