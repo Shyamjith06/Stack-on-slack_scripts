@@ -11,9 +11,7 @@ node {
     
     }
     
-
- dir(project_path) {
- stage(' Downloading Jar From Artifactory Locally To Deploy'){
+   stage(' Downloading Jar From Artifactory Locally To Deploy'){
     echo "Deploying to Staging with latest QA artifact, accessing latest QA build number ${params.QA_BUILD_NUMBER}"
     def server= Artifactory.server 'Artifactory'
     def downloadSpec = """{
@@ -26,9 +24,9 @@ node {
     ]
     }"""
     server.download(downloadSpec)
-    
-    
    }
+ 
+ 
  stage('Jfrog Artifacory Upload') {
         echo "Updating Prod artifact with latest QA artifact${params.QA_BUILD_NUMBER}"
         def server= Artifactory.server 'Artifactory'
@@ -41,7 +39,7 @@ node {
        
         }
         
-def project_path="devops-pipeline/Ansible"
+def playbook_path="devops-pipeline/Ansible"
 dir(playbook_path) {
 stage('Deploying To Staging') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.yml'
@@ -56,5 +54,4 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.
    
 }*/
 
-}
 }
