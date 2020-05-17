@@ -61,7 +61,7 @@ sh 'mvn sonar:sonar'
    }   
  stage('Getting Ready For Ansible') {
    sh 'rm -rf devops-pipeline'
-   sh 'git clone -b testung https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
+   sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
   }
         
    
