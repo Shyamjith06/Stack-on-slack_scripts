@@ -1,6 +1,6 @@
+properties([[$class: 'JiraProjectProperty', siteName: 'https://accelerators-stack-on-slack.atlassian.net/'], parameters([string(defaultValue: '', description: 'Select the QA number to build', name: 'QA_BUILD_NUMBER', trim: false)])])
+
 node {
-     properties([[$class: 'JiraProjectProperty', siteName: 'https://accelerators-stack-on-slack.atlassian.net/'], parameters([string(defaultValue: '', description: 'Select the QA number to build', name: 'QA_BUILD_NUMBER', trim: false)])])
-     
      
   stage('Git-Checkout') {
    sh 'rm -rf devops-pipeline'
