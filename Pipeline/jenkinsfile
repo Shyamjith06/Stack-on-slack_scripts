@@ -59,11 +59,7 @@ sh 'mvn sonar:sonar'
         }
   
    }   
- stage('Getting Ready For Ansible') {
-   sh 'rm -rf devops-pipeline'
-   sh 'git clone -b testing https://devops311@bitbucket.org/accelerators-devops/devops-pipeline.git'
-  }
-        
+ 
    
 def playbook_path="devops-pipeline/Ansible"
 dir(playbook_path) {
