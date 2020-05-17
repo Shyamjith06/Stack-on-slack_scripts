@@ -3,6 +3,7 @@
 - hosts: all
   become: yes
   become_method: sudo
+  QABuild: "{{ QA_BUILD_NUMBER }}"
   tasks:
   - name: Create Dir to Downlaod Tomcat.
     file: path=/opt/SP/apps/tomcat state=directory
@@ -21,7 +22,7 @@
     command: rm -rf /opt/SP/apps/tomcat/webapps/ROOT
   
   - name: Copy Project War Files
-    copy: src=/var/lib/jenkins/workspace/war-storage-uat/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
+    copy: src=/var/lib/jenkins/workspace/war-storage-uat/"{{ QABuild }}"/debitcardcustomer-0.0.1-SNAPSHOT.war dest=/opt/SP/apps/tomcat/webapps/ROOT.war mode=0644
     notify:
     - Restart Tomcat
 
