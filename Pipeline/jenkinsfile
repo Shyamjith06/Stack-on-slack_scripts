@@ -18,7 +18,7 @@ node {
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-test/${params.QA_BUILD_NUMBER}/*.war",
+      "pattern": "debit-card-application-staging/${params.QA_BUILD_NUMBER}/*.war",
       "target": "/var/lib/jenkins/workspace/war-storage-prod/"
       
     }
