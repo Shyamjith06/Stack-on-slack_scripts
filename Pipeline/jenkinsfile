@@ -1,4 +1,6 @@
 node {
+     properties([parameters([string(defaultValue: '', description: 'Select the QA number to build', name: 'QA_BUILD_NUMBER', trim: false)])])
+     
      
   stage('Git-Checkout') {
    sh 'rm -rf devops-pipeline'
@@ -12,11 +14,12 @@ node {
 
  dir(project_path) {
  stage(' Downloading Jar From Artifactory Locally To Deploy'){
+    echo "Deploying to Staging with latest QA artifact, accessing latest QA build number ${params.QA_BUILD_NUMBER}"
     def server= Artifactory.server 'Artifactory'
     def downloadSpec = """{
     "files": [
     {
-      "pattern": "debit-card-application-testing/${QA_BUILD_NUMBER}/*.war",
+      "pattern": "debit-card-application-testing/${params.QA_BUILD_NUMBER}/*.war",
       "target": "/var/lib/jenkins/workspace/war-storage-uat/"
       
     }
@@ -27,11 +30,12 @@ node {
     
    }
  stage('Jfrog Artifacory Upload') {
+        echo "Updating Prod artifact with latest QA artifact${params.QA_BUILD_NUMBER}"
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "/var/lib/jenkins/workspace/war-storage-uat/*.war",
-                        "target": "debit-card-application-staging/${QA_BUILD_NUMBER}/"}]
+                        "target": "debit-card-application-staging/${params.QA_BUILD_NUMBER}/"}]
                     }"""
         server.upload(uploadSpec)
        
@@ -44,13 +48,13 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u staging playbook.
 }
 }
 
-        stage('Email -Notification')
+        /*stage('Email -Notification')
  {
              mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com'
              subject: "Build Success:",
              body: "Build Successfully on UAT with QA Build#${QA_BUILD_NUMBER}.;"
    
-}
+}*/
 
 }
 }
