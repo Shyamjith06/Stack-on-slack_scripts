@@ -52,7 +52,7 @@ sh 'mvn sonar:sonar'
                     def uploadSpec= """{
                         "files": [{
                         "pattern": "target/debitcardcustomer-0.0.1-SNAPSHOT.war",
-                        "target": "debit-card-application-testing/$BUILD_NUMBER"}]
+                        "target": "debit-card-application-testing/$BUILD_NUMBER/"}]
                     }"""
         server.upload(uploadSpec)
        
