@@ -83,13 +83,13 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u testing playbook.
  
     }
     
-          
+   /*       
    stage('Email -Notification')
  {
              mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com',
              subject: "Build Success:",
              body: "Build Successfully with QA Build#${currentBuild.number} .;"
-   }
+   }*/
 
         
     }
