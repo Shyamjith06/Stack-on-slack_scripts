@@ -60,9 +60,7 @@ sh label: 'Ansible', script: 'ansible-playbook -i inventory -u development playb
       
         stage('Email -Notification')
  {
-             mail to: 'devashish.kumar@mindtree.com','rohith.basavarajappa@mindtree.com',
-             subject: "Build Success:",
-             body: "Build Successfully with Dev Build#${currentBuild.number}.;"
+ mail bcc: '', body: 'Build Successfully with Dev Build#${currentBuild.number}', cc: 'rohith.basavarajappa@mindtree.com', from: '', replyTo: '', subject: 'Build Success;', to: 'devashish.kumar@mindtree.com'
    
 }
 
