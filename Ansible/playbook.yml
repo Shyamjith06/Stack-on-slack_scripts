@@ -3,7 +3,8 @@
 - hosts: all
   become: yes
   become_method: sudo
-  QABuild: "{{ QA_BUILD_NUMBER }}"
+  vars:
+    QABuild: "{{ QA_BUILD_NUMBER }}"
   tasks:
   - name: Create Dir to Downlaod Tomcat.
     file: path=/opt/SP/apps/tomcat state=directory
