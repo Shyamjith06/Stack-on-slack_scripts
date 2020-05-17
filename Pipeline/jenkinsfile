@@ -43,13 +43,13 @@ stage('Deploying To Production') {
 sh label: 'Ansible', script: 'ansible-playbook -i inventory -u prod playbook.yml'
 }
 
-            stage('Email -Notification')
+       /*     stage('Email -Notification')
  {
              mail to: 'devashish.kumar@mindtree.com',
              subject:"build Success:",
              body: "Build Successfully .;"
    
-}
+}*/
 
              
    }
