@@ -32,7 +32,7 @@ node {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/var/lib/jenkins/workspace/war-storage-uat/*.war",
+                        "pattern": "/var/lib/jenkins/workspace/war-storage-uat/${params.QA_BUILD_NUMBER}/*.war",
                         "target": "debit-card-application-staging/${params.QA_BUILD_NUMBER}/"}]
                     }"""
         server.upload(uploadSpec)
