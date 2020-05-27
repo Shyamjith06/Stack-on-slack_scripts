@@ -46,23 +46,33 @@ sh 'mvn sonar:sonar'
    snykSecurity severity: 'high', snykInstallation: 'SnykPlugin', snykTokenId: 'snyk-id'
   }
    
-   
-  stage('Jfrog Artifacory Upload') {
-        def server= Artifactory.server 'Artifactory'
-                    def uploadSpec= """{
-                        "files": [{
-                        "pattern": "target/debitcardcustomer-0.0.1-SNAPSHOT.war",
-                        "target": "debit-card-application-testing/$BUILD_NUMBER/"}]
-                    }"""
-        server.upload(uploadSpec)
-       
-        }
+      
+       stage('Jfrog Artifacory Upload') {
+       def uploadSpec = """{
+          "files": [
+            {
+              "pattern": "target/debitcardcustomer-0.0.1-SNAPSHOT.war",
+              "target": "debit-card-application-testing/$BUILD_NUMBER/"
+            }
+         ]
+        }"""
+        def server = Artifactory.server 'Artifactory'
+        def buildInfo = server.upload(uploadSpec)
+        
+        server.publishBuildInfo(buildInfo)
+   }
+        
+        
+        
+        
+        
+        
   
    /* stage('Uploading Dependency ') {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/pom.xml",
+                        "pattern": "pom.xml",
                         "target": "debit-card-application-testing-dependency/$BUILD_NUMBER/"}]
                     }"""
         server.upload(uploadSpec)
