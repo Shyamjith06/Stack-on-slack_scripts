@@ -58,6 +58,21 @@ sh 'mvn sonar:sonar'
        
         }
   
+   /* stage('Uploading Dependency ') {
+        def server= Artifactory.server 'Artifactory'
+                    def uploadSpec= """{
+                        "files": [{
+                        "pattern": "/pom.xml",
+                        "target": "debit-card-application-testing-dependency/$BUILD_NUMBER/"}]
+                    }"""
+        server.upload(uploadSpec)
+       
+        }
+  */
+  
+  
+  
+  
    }   
  
    
